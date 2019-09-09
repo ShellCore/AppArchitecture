@@ -1,8 +1,10 @@
-package com.shell.android.daggerlogin
+package com.shell.android.daggerlogin.login
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.shell.android.daggerlogin.R
+import com.shell.android.daggerlogin.root.App
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {

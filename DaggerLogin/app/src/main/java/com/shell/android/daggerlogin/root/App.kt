@@ -1,4 +1,4 @@
-package com.shell.android.daggerlogin
+package com.shell.android.daggerlogin.root
 
 import android.app.Application
 
