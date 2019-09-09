@@ -11,6 +11,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        (application as App).component.inject(this)
+
         btnLogin.setOnClickListener {
             Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT)
                 .show()
