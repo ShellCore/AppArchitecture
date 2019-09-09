@@ -1,6 +1,7 @@
 package com.shell.android.daggerlogin.root
 
 import android.app.Application
+import com.shell.android.daggerlogin.login.LoginModule
 
 class App: Application() {
 
@@ -11,6 +12,7 @@ class App: Application() {
 
         component = DaggerApplicationComponent.builder()
             .applicationModule(ApplicationModule(this))
+            .loginModule(LoginModule())
             .build()
     }
 }
