@@ -21,6 +21,7 @@ android {
         }
         applicationVariants.all { variant ->
             buildConfigField "String", "TWITCH_BASE_URL", project.property('TWITCH_BASE_URL')
+            buildConfigField "String", "TWITCH_CLIENT_ID", project.property('TWITCH_CLIENT_ID')
         }
     }
 }
