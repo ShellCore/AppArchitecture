@@ -23,9 +23,8 @@ class PresenterUnitTest {
         user = User(name = "Luz", lastname = "Arely")
 
 //        `when`(mocketModel!!.getUser()).thenReturn(user)
-
-        `when`(mocketView!!.getName()).thenReturn("Cesar")
-        `when`(mocketView!!.getLastname()).thenReturn("Morales")
+//        `when`(mocketView!!.getName()).thenReturn("Cesar")
+//        `when`(mocketView!!.getLastname()).thenReturn("Morales")
 
         presenter = LoginActivityPresenter(mocketModel!!)
         presenter!!.setView(mocketView!!)
@@ -34,8 +33,24 @@ class PresenterUnitTest {
     @Test
     fun noExistsInteractionWithView() {
         presenter!!.getCurrentUser()
-        verifyZeroInteractions(mocketView)
         // Falla porque siempre hay interacción con view
+        //verifyZeroInteractions(mocketView)
+        verify(mocketView, times(1))?.showUserNotAvailable()
     }
 
+    @Test
+    fun loadUserFromRepoWhenValidUserIsPresent() {
+        `when`(mocketModel!!.getUser()).thenReturn(user)
+
+        presenter!!.getCurrentUser()
+
+        // Comprobamos la interactuación con el modelo de datos
+        verify(mocketModel, times(1))?.getUser()
+
+        // Comprobamos la interactuación con la vista
+        verify(mocketView, times(1))?.setName("Luz")
+        verify(mocketView, times(1))?.setLastname("Arely")
+        verify(mocketView, never())?.showUserNotAvailable()
+
+    }
 }
