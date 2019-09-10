@@ -51,6 +51,19 @@ class PresenterUnitTest {
         verify(mocketView, times(1))?.setName("Luz")
         verify(mocketView, times(1))?.setLastname("Arely")
         verify(mocketView, never())?.showUserNotAvailable()
+    }
 
+    @Test
+    fun showErrorMessageWhenUserIsNull() {
+        `when`(mocketModel!!.getUser()).thenReturn(null)
+
+        presenter!!.getCurrentUser()
+
+        verify(mocketModel, times(1))?.getUser()
+
+        // Comprobamos la interactuación con la vista
+        verify(mocketView, never())?.setName("Luz")
+        verify(mocketView, never())?.setLastname("Arely")
+        verify(mocketView, times(1))?.showUserNotAvailable()
     }
 }
