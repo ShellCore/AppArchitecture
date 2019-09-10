@@ -88,4 +88,22 @@ class PresenterUnitTest {
         verify(mocketView, times(1))?.getLastname()
         verify(mocketView, times(2))?.showIntpuError()
     }
+
+    @Test
+    fun setValidUser() {
+        `when`(mocketView!!.getName()).thenReturn("Luz")
+        `when`(mocketView!!.getLastname()).thenReturn("Arely")
+
+        presenter!!.loginBtnClicked()
+
+        // Se realiza la llamada doble, 1 para validación (if), y otra para la persistencia
+        verify(mocketView!!, times(2)).getName()
+        verify(mocketView!!, times(2)).getLastname()
+
+        // Verificación de la persistencia con el repositorio
+        verify(mocketModel!!, times(1)).createUser("Luz", "Arely")
+
+        // Verificación de mostrar el mensaje de exito al usuario
+        verify(mocketView!!, times(1)).showUserSaved()
+    }
 }
