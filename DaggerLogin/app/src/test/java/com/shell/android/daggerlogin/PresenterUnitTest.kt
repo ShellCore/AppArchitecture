@@ -60,10 +60,32 @@ class PresenterUnitTest {
         presenter!!.getCurrentUser()
 
         verify(mocketModel, times(1))?.getUser()
-
-        // Comprobamos la interactuación con la vista
         verify(mocketView, never())?.setName("Luz")
         verify(mocketView, never())?.setLastname("Arely")
         verify(mocketView, times(1))?.showUserNotAvailable()
+    }
+
+    @Test
+    fun createErrorMessageIfAnyFieldIsEmpty() {
+        // Prueba 1. Poniendo el campo "name" vacio
+        `when`(mocketView!!.getName()).thenReturn("")
+
+        presenter!!.loginBtnClicked()
+
+        verify(mocketView, times(1))?.getName()
+        verify(mocketView, never())?.getLastname()
+        verify(mocketView, times(1))?.showIntpuError()
+
+        // Prueba 2. Poniendo el cambo "name" y el campo "lastname" vacio
+        `when`(mocketView!!.getName()).thenReturn("Luz")
+        `when`(mocketView!!.getLastname()).thenReturn("")
+
+        presenter!!.loginBtnClicked()
+
+        // El método se llama 2 veces. 1 en la prueba anterior, y otra en la actual
+        verify(mocketView, times(2))?.getName()
+
+        verify(mocketView, times(1))?.getLastname()
+        verify(mocketView, times(2))?.showIntpuError()
     }
 }
