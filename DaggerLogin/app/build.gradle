@@ -19,6 +19,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        applicationVariants.all { variant ->
+            buildConfigField "String", "TWITCH_BASE_URL", project.property('TWITCH_BASE_URL')
+            buildConfigField "String", "TWITCH_CLIENT_ID", project.property('TWITCH_CLIENT_ID')
+        }
     }
 }
 
@@ -36,5 +40,8 @@ dependencies {
 
     implementation 'com.google.dagger:dagger:2.24'
     kapt 'com.google.dagger:dagger-compiler:2.24'
-    //annotationProcessor 'com.google.dagger:dagger-android-processor:2.24'
+
+    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.1.1'
 }

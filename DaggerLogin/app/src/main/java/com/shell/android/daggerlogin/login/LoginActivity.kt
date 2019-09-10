@@ -2,16 +2,26 @@ package com.shell.android.daggerlogin.login
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import com.shell.android.daggerlogin.BuildConfig
 import com.shell.android.daggerlogin.R
+import com.shell.android.daggerlogin.http.TwitchAPI
+import com.shell.android.daggerlogin.http.twitch.TopGameResponse
 import com.shell.android.daggerlogin.root.App
 import kotlinx.android.synthetic.main.activity_login.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import javax.inject.Inject
 
 class LoginActivity : AppCompatActivity(), LoginActivityMVP.View {
 
     @Inject
     lateinit var presenter: LoginActivityMVP.Presenter
+
+    @Inject
+    lateinit var twitchApi: TwitchAPI
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +32,8 @@ class LoginActivity : AppCompatActivity(), LoginActivityMVP.View {
         btnLogin.setOnClickListener {
             presenter.loginBtnClicked()
         }
+
+        getTopGames()
     }
 
     private fun setupInjection() {
@@ -60,5 +72,29 @@ class LoginActivity : AppCompatActivity(), LoginActivityMVP.View {
 
     override fun setLastname(lastname: String) {
         tilLastname.editText!!.setText(lastname)
+    }
+
+    fun getTopGames() {
+        // Ejemplo de uso de la api de Twitch con retrofit
+        val call = twitchApi.getTopGames(BuildConfig.TWITCH_CLIENT_ID)
+        call.enqueue(object: Callback<TopGameResponse> {
+            override fun onResponse(
+                call: Call<TopGameResponse>,
+                response: Response<TopGameResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val resp = response.body()
+                    resp?.top?.forEach {
+                        Log.w("Games", it.game.name)
+                    }
+
+                }
+            }
+
+            override fun onFailure(call: Call<TopGameResponse>, t: Throwable) {
+                Log.e("LoginActivity", t.localizedMessage)
+            }
+
+        })
     }
 }
