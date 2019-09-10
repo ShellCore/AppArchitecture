@@ -19,6 +19,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        applicationVariants.all { variant ->
+            buildConfigField "String", "TWITCH_BASE_URL", project.property('TWITCH_BASE_URL')
+        }
     }
 }
 
