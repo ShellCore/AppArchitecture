@@ -1,14 +1,24 @@
 package com.shell.android.daggerlogin.login
 
-import androidx.appcompat.app.AppCompatActivity
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.shell.android.daggerlogin.BuildConfig
 import com.shell.android.daggerlogin.R
 import com.shell.android.daggerlogin.http.TwitchAPI
+import com.shell.android.daggerlogin.http.twitch.Game
+import com.shell.android.daggerlogin.http.twitch.Top
 import com.shell.android.daggerlogin.http.twitch.TopGameResponse
 import com.shell.android.daggerlogin.root.App
+import io.reactivex.Observable
+import io.reactivex.ObservableSource
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Function
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -33,7 +43,8 @@ class LoginActivity : AppCompatActivity(), LoginActivityMVP.View {
             presenter.loginBtnClicked()
         }
 
-        getTopGames()
+//        getTopGames()
+        getTopGamesReactive()
     }
 
     private fun setupInjection() {
@@ -96,5 +107,32 @@ class LoginActivity : AppCompatActivity(), LoginActivityMVP.View {
             }
 
         })
+    }
+
+    fun getTopGamesReactive() {
+        twitchApi.getTopGamesObserbable(BuildConfig.TWITCH_CLIENT_ID)
+            .flatMap(Function<TopGameResponse, Observable<Top>> {
+                Observable.fromIterable(it.top)
+            })
+            .flatMap {
+                Observable.just(it.game.name)
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object: Observer<String> {
+                override fun onComplete() {
+                }
+
+                override fun onSubscribe(d: Disposable) {
+                }
+
+                override fun onNext(gameName: String) {
+                    Log.w("GAME NAME", gameName)
+                }
+
+                override fun onError(e: Throwable) {
+                    Log.e("Observable", e.localizedMessage)
+                }
+            })
     }
 }
