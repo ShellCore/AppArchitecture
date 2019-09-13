@@ -1,11 +1,12 @@
 package com.shell.android.moviesfeed.movies
 
+import com.shell.android.moviesfeed.Movie
 import io.reactivex.Observable
 
 interface MoviesMVP {
 
     interface View {
-        fun updateData(viewModel: MoviesViewModel)
+        fun updateData(viewModel: Movie)
         fun showSnackbar(message: String)
     }
 
@@ -16,6 +17,6 @@ interface MoviesMVP {
     }
 
     interface Model {
-        fun result(): Observable<MoviesViewModel>
+        fun result(): Observable<Movie>
     }
 }

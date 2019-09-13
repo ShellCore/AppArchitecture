@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.shell.android.moviesfeed.movies.MoviesAdapter
 import com.shell.android.moviesfeed.movies.MoviesMVP
 import com.shell.android.moviesfeed.movies.MoviesViewModel
@@ -12,12 +13,8 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), MoviesMVP.View {
 
-    companion object {
-        const val TAG: String = "MainActivity"
-    }
-
     @Inject
-    private lateinit var presenter: MoviesMVP.Presenter
+    lateinit var presenter: MoviesMVP.Presenter
 
     private lateinit var moviesAdapter: MoviesAdapter
     private var movies: ArrayList<Movie> = ArrayList()
@@ -49,12 +46,20 @@ class MainActivity : AppCompatActivity(), MoviesMVP.View {
         presenter.loadData()
     }
 
-    override fun updateData(viewModel: MoviesViewModel) {
-        // TODO Falta implementación
+    override fun onStop() {
+        super.onStop()
+        presenter.rxJavaUnsubscribe()
+        movies.clear()
+        moviesAdapter.notifyDataSetChanged()
+    }
+
+    override fun updateData(viewModel: Movie) {
+        movies.add(viewModel)
+        moviesAdapter.notifyItemChanged(movies.size - 1)
     }
 
     override fun showSnackbar(message: String) {
-        // TODO Falta implementación
+        Snackbar.make(mainContainer, message, Snackbar.LENGTH_SHORT).show()
 
     }
 }
