@@ -1,7 +1,9 @@
 package com.shell.android.moviesfeed.movies
 
+import com.shell.android.moviesfeed.BuildConfig
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import com.shell.android.moviesfeed.http.apimodel.Result
 
 class ModelImpl(
 
@@ -9,13 +11,18 @@ class ModelImpl(
 
 ) : MoviesMVP.Model {
 
-    override fun result(): Observable<MoviesModel> {
-        return Observable.zip(repository.getResultData(), repository.getCountryData(), object: BiFunction<Result, String, MoviesModel> {
-            override fun apply(result: Result, country: String): MoviesModel {
-                // TODO Cambiar result.toString() cuando tengamos el POJO de datos
-                return MoviesModel(result.toString(), country, "")
-            }
+    companion object {
+        const val IMAGE_BASE_URL = BuildConfig.MOVIEDB_IMAGE_BASE_URL
+    }
 
-        })
+    override fun result(): Observable<MoviesModel> {
+        return Observable.zip(repository.getResultData(), repository.getCountryData(),
+            BiFunction<Result, String, MoviesModel> { result, country ->
+                MoviesModel(
+                    result.title,
+                    country,
+                    "$IMAGE_BASE_URL${result.posterPath}"
+                )
+            })
     }
 }

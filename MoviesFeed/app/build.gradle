@@ -23,7 +23,9 @@ android {
         applicationVariants.all { variant ->
             buildConfigField "String", "MOVIEDB_BASE_URL", project.property('MOVIEDB_BASE_URL')
             buildConfigField "String", "MOVIEDB_API_KEY", project.property('MOVIEDB_API_KEY')
+            buildConfigField "String", "MOVIEDB_IMAGE_BASE_URL", project.property('MOVIEDB_IMAGE_BASE_URL')
             buildConfigField "String", "OMDB_BASE_URL", project.property('OMDB_BASE_URL')
+            buildConfigField "String", "OMDB_API_KEY", project.property('OMDB_API_KEY')
         }
     }
 }

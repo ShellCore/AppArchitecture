@@ -1,13 +1,13 @@
 package com.shell.android.moviesfeed
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.shell.android.moviesfeed.movies.MoviesModel
 import com.shell.android.moviesfeed.movies.MoviesAdapter
 import com.shell.android.moviesfeed.movies.MoviesMVP
+import com.shell.android.moviesfeed.movies.MoviesModel
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), MoviesMVP.View {
             adapter = moviesAdapter
             itemAnimator = DefaultItemAnimator()
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = GridLayoutManager(context, 2)
         }
     }
 
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), MoviesMVP.View {
 
     override fun updateData(viewModel: MoviesModel) {
         moviesModels.add(viewModel)
-        moviesAdapter.notifyItemChanged(moviesModels.size - 1)
+        moviesAdapter.notifyItemInserted(moviesModels.size - 1)
     }
 
     override fun showSnackbar(message: String) {

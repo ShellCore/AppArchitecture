@@ -7,6 +7,6 @@ import retrofit2.http.Query
 
 interface MovieInfoService {
 
-    @GET
+    @GET(".")
     fun getMovieInfo(@Query("t") title: String): Observable<MovieResponse>
 }
