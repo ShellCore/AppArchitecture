@@ -1,6 +1,6 @@
-package com.shell.android.moviesfeed
+package com.shell.android.moviesfeed.movies
 
-data class Movie(
+data class MoviesModel(
     var title: String,
     var country: String,
     var photoUrl: String

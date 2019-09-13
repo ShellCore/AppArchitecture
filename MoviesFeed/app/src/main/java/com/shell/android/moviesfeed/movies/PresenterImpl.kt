@@ -1,7 +1,6 @@
 package com.shell.android.moviesfeed.movies
 
 import android.util.Log
-import com.shell.android.moviesfeed.Movie
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
@@ -24,13 +23,13 @@ class PresenterImpl(
         subscription = model.result()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeWith(object: DisposableObserver<Movie>() {
+            .subscribeWith(object: DisposableObserver<MoviesModel>() {
                 override fun onComplete() {
                     view?.showSnackbar("Información descargada con éxito.")
                 }
 
-                override fun onNext(movie: Movie) {
-                    view?.updateData(movie)
+                override fun onNext(moviesModel: MoviesModel) {
+                    view?.updateData(moviesModel)
                 }
 
                 override fun onError(e: Throwable) {

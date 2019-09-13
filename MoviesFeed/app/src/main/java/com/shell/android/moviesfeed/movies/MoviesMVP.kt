@@ -1,22 +1,21 @@
 package com.shell.android.moviesfeed.movies
 
-import com.shell.android.moviesfeed.Movie
 import io.reactivex.Observable
 
 interface MoviesMVP {
 
     interface View {
-        fun updateData(viewModel: Movie)
+        fun updateData(viewModel: MoviesModel)
         fun showSnackbar(message: String)
     }
 
     interface Presenter {
         fun loadData()
         fun rxJavaUnsubscribe()
-        fun setView(view: MoviesMVP.View)
+        fun setView(view: View)
     }
 
     interface Model {
-        fun result(): Observable<Movie>
+        fun result(): Observable<MoviesModel>
     }
 }

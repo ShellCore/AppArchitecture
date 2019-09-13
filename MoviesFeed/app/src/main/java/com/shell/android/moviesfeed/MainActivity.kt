@@ -5,9 +5,9 @@ import android.os.Bundle
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.shell.android.moviesfeed.movies.MoviesModel
 import com.shell.android.moviesfeed.movies.MoviesAdapter
 import com.shell.android.moviesfeed.movies.MoviesMVP
-import com.shell.android.moviesfeed.movies.MoviesViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity(), MoviesMVP.View {
     lateinit var presenter: MoviesMVP.Presenter
 
     private lateinit var moviesAdapter: MoviesAdapter
-    private var movies: ArrayList<Movie> = ArrayList()
+    private var moviesModels: ArrayList<MoviesModel> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(), MoviesMVP.View {
     }
 
     private fun setupMoviesAdapter() {
-        moviesAdapter = MoviesAdapter(movies)
+        moviesAdapter = MoviesAdapter(moviesModels)
         recMovies.apply {
             adapter = moviesAdapter
             itemAnimator = DefaultItemAnimator()
@@ -49,13 +49,13 @@ class MainActivity : AppCompatActivity(), MoviesMVP.View {
     override fun onStop() {
         super.onStop()
         presenter.rxJavaUnsubscribe()
-        movies.clear()
+        moviesModels.clear()
         moviesAdapter.notifyDataSetChanged()
     }
 
-    override fun updateData(viewModel: Movie) {
-        movies.add(viewModel)
-        moviesAdapter.notifyItemChanged(movies.size - 1)
+    override fun updateData(viewModel: MoviesModel) {
+        moviesModels.add(viewModel)
+        moviesAdapter.notifyItemChanged(moviesModels.size - 1)
     }
 
     override fun showSnackbar(message: String) {
